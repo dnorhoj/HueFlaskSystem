@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Register</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<style>
+			ul {
+				list-style-position: inside;
+				padding-left: 0;
+			}
+		</style>		
+	</head>
+	<body>
+		{% include "nav.html" %}
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h2>Register<br/></h2><br/>
+					<form method="POST">
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" class="form-control" name="email" placeholder="john@doe.com" {% if login is defined %}value="{{login[0]}}"{% endif %}>
+						</div>
+
+						<div class="form-group">
+							<label>Username</label>
+							<input type="text" class="form-control" name="uname" placeholder="johndoe" {% if login is defined %}value="{{login[1]}}"{% endif %}>
+						</div>
+
+						<div class="form-group">
+							<label>Password</label>
+							<input type="password" class="form-control" name="pass" placeholder="hunter2" {% if login is defined %}value="{{login[2]}}"{% endif %}>
+						</div>
+						{% if error is defined %}
+						<div class="alert alert-danger">
+							<p><strong>Error!</strong> {{error}}</p>
+						</div>
+						{% endif %}
+						{% if criteria is defined %}
+						<div class="alert alert-warning">
+							<p><strong>Error!</strong> Your password does not meet the criterias.</p>
+							<ul>
+								<li>At least 7 characters</li>
+								<li>At least one uppercase and lowercase letter</li>
+								<li>At least one number</li>
+							</ul>
+						</div>
+						{% endif %}
+						<div class="form-check">
+							<button type="submit" class="btn btn-success">Create account</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

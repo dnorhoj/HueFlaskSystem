@@ -1,0 +1,29 @@
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<ul class="nav navbar-nav">
+			<li id="navhome"><a href="/">Home</a></li>
+			<li id="navcontrol"><a href="/controlpanel">Control Panel</a></li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li id="navlogin"><a href="/login" id="logintext">Log in&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in"></span></a></li>
+		</ul>
+	</div>
+</nav>
+<script>
+	var path = window.location.pathname;
+
+	switch(path) {
+		case "/":
+			document.getElementById('navhome').setAttribute('class', 'active');
+			break;
+		
+		case "/register":
+		case "/login":
+			document.getElementById('navlogin').setAttribute('class', 'active');
+			break;
+		
+		case "/controlpanel":
+			document.getElementById('navcontrol').setAttribute('class', 'active');
+			break;
+	}
+</script>

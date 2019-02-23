@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Login</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</head>
+	<body>
+		{% include "nav.html" %}
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h2>Log in<br/></h2><br/>
+					<form method="POST">
+						<div class="form-group">
+							<label>Username</label>
+							<input type="text" class="form-control" name="uname" placeholder="johndoe123">
+						</div>
+						
+						<div class="form-group">
+							<label>Password</label>
+							<input type="password" class="form-control" name="pass" placeholder="hunter2">
+						</div>
+
+						<div class="form-check">
+							<button type="submit" class="btn btn-primary">Log in</button>
+							<a href="/register" class="btn btn-success">Register</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
