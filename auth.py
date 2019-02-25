@@ -47,12 +47,13 @@ def register(username, password, email=None):
 				return 3 # 3 = Email already exist
 
 		user = []
-		user.append(email)
-		user.append(username)
+		user.append(email) # Email field
+		user.append(username) # Username field
 
 		saltedpass = password+data["salt"]
 		encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
-		user.append(encryptedpass)
+		user.append(encryptedpass) # Encrypted password field
+		user.append("") # There's no Hue API Key (yet)
 
 		data["users"].append(user)
 

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect
-import auth, json
+import auth, json, hue
 
 # Set up app
 app = Flask(__name__)

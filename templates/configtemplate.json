@@ -1,0 +1,13 @@
+{
+	"__comment": "Rename this file to data.json and place in /data",
+	"secret": "(Flask secret key)",
+	"salt": "",
+	"hue": {
+		"clientid": "",
+		"appid": "",
+		"deviceid": "",
+		"devicename": "Python Hue Website",
+		"state": ""
+	},
+	"users": []
+}
