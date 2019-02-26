@@ -22,6 +22,12 @@
 							<input type="password" class="form-control" name="pass" placeholder="hunter2">
 						</div>
 
+						{% if error is defined %}
+						<div class="alert alert-danger">
+							<p><strong>Error!</strong> {{error}}</p>
+						</div>
+						{% endif %}
+						
 						<div class="form-check">
 							<button type="submit" class="btn btn-primary">Log in</button>
 							<a href="/register" class="btn btn-success">Register</a>

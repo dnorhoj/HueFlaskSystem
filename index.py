@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, session, redirect
-import auth, json, hue
+import auth, json, hue, config
 
 # Set up app
 app = Flask(__name__)
-app.secret_key = json.load(open("data.json"))["secret"]
+app.secret_key = config.getConfig("secret")
 PORT = 8000
 
 @app.route('/')
@@ -18,7 +18,8 @@ def loginsite():
 		if auth.login(form('uname'), form('pass')):
 			session['username'] = form('uname')
 			return redirect("/controlpanel")
-		return "Wrong credentials :("
+		
+		return render_template("login.html", error="Wrong password!")
 
 	return render_template("login.html")
 
@@ -30,6 +31,7 @@ def registersite():
 		code = auth.register(form('uname'), form('pass'), form('email'))
 		login = (form('email'), form('uname'), form('pass'))
 		if code == 0:
+			session['username'] = form('uname')
 			return redirect("/controlpanel")
 		elif code == 1:
 			return render_template("register.html", criteria=True, login=login)

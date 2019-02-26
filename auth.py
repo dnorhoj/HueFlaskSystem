@@ -1,4 +1,4 @@
-import json, hashlib, re
+import json, hashlib, re, config
 
 # Filenames
 DATAFILE = "data.json"
@@ -14,49 +14,46 @@ def checkpass(password):
 
 # Login function
 def login(username, password):
-	with open(DATAFILE) as f:
-		data = json.load(f)
+	users = config.getUsers()
 
-		for info in data["users"]:
-			if info[1] == username:
+	saltedpass = password+config.getConfig("salt")
+	encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
+	
+	for user in users:
+		if user[1] == username:
+			if user[2] == encryptedpass:
+				return True
 
-				saltedpass = password+data["salt"]
-				encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
-
-				if info[2] == encryptedpass:
-					return True
-
-		print(f"Username: {username} not found")
-		return False
+	print(f"Username: '{username}' not found")
+	return False
 
 # Register function
-def register(username, password, email=None):
+def register(username, password, email):
 	if not checkpass(password):
 		return 1 # 1 = Password does not meet criterias
 	elif len(username) < 5:
 		return 4 # 4 = Username is too short
 	elif re.match(r"[^@]+@[^@]+\.[^@]+", email) is None:
 		return 5 # 5 = Email is invalid
-		
-	with open(DATAFILE) as f:
-		data = json.load(f)
-		for user in data["users"]:
-			if user[1] == username:
-				return 2 # 2 = Username already exist
-			elif user[0] == email:
-				return 3 # 3 = Email already exist
+	
+	users = config.getUsers()
 
-		user = []
-		user.append(email) # Email field
-		user.append(username) # Username field
+	for user in users:
+		if user[1] == username:
+			return 2 # 2 = Username already exist
+		elif user[0] == email:
+			return 3 # 3 = Email already exist
+	
+	# Hash password
+	saltedpass = password+config.getConfig("salt")
+	encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
+	
+	user = [] # Create user object
+	user.append(email) # Email field
+	user.append(username) # Username field
+	user.append(encryptedpass) # Encrypted password field
+	user.append("") # There's no Hue API Key (yet)
 
-		saltedpass = password+data["salt"]
-		encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
-		user.append(encryptedpass) # Encrypted password field
-		user.append("") # There's no Hue API Key (yet)
+	config.addUser(user) # Add user to file
 
-		data["users"].append(user)
-
-		with open(DATAFILE, 'w') as outfile:  
-			json.dump(data, outfile, indent=4)
-			return 0 # 0 = Success
+	return 0 # 0 = Success
