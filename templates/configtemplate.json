@@ -3,11 +3,9 @@
 	"secret": "(Flask secret key)",
 	"salt": "",
 	"hue": {
-		"clientid": "",
 		"appid": "",
-		"deviceid": "",
-		"devicename": "Python Hue Website",
+		"clientid": "",
+		"clientsecret": "",
 		"state": ""
-	},
-	"users": []
+	}
 }
