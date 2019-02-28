@@ -16,14 +16,14 @@ def getToken(code):
 	authstring = base64.b64encode(authstring.encode()).decode()
 
 	querystring = {
-		"code":code, 
+		"code":code,
 		"grant_type":"authorization_code"
 	}
-	
+
 	headers = {
 		'authorization': f'Basic {authstring}'
 	}
 
 	response = requests.request("POST", url, headers=headers, params=querystring)
-	
+
 	return response.json()
