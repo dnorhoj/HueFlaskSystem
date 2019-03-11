@@ -38,7 +38,7 @@ class Hue():
 			"linkbutton": True
 		}
 	
-		r = requests.request("PUT", f"{self.BRIDGE_API}/0/config", json=payload, headers=headers)
+		requests.request("PUT", f"{self.BRIDGE_API}/0/config", json=payload, headers=headers)
 
 		# Second Half
 		payload = {
@@ -46,16 +46,22 @@ class Hue():
 		}
 
 		response = requests.request("POST", self.BRIDGE_API, json=payload, headers=headers)
-
-		return response.text
+		
+		return response.json()[0]["success"]["username"]
 
 	def authURL(self):
 		hue = config.getConfig("hue")
 		return f"{self.OAUTH_API}/auth?clientid={hue['clientid']}&appid={hue['appid']}&deviceid={hue['appid']}&state={hue['state']}&response_type=code"
-	
+
 	def codeToBridge(self, code):
-		access_token = self._convertCode(code)['access_token']
-		return self._getBridgeToken(access_token)
+		try:
+			access_token = self._convertCode(code)['access_token']
+		except KeyError:
+			return 1 # Invalid token
+		try:
+			return self._getBridgeToken(access_token)
+		except KeyError:
+			return 0 # Unknown Error
 
 if __name__ == "__main__":
 	h = Hue()
