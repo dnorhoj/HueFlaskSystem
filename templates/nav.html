@@ -5,7 +5,11 @@
 			<li id="navcontrol"><a href="/controlpanel">Control Panel</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
+			{% if not session['userID'] is defined %}
 			<li id="navlogin"><a href="/login" id="logintext">Log in&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in"></span></a></li>
+			{% else %}
+			<li id="navlogin"><a href="/logout" id="logintext">Log out&nbsp;&nbsp;<span class="glyphicon glyphicon-log-out"></span></a></li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>

@@ -31,3 +31,6 @@ def addUser(list):
 		newdata.append(list)
 		with open(USER_FILE, "w") as outfile:
 			json.dump(newdata, outfile, indent=4)
+
+def setUser():
+	pass

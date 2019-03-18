@@ -11,7 +11,18 @@
 <body>
 	{% include "nav.html" %}
 	<div class="container">
-		<h1>Welcome, {{username}}!</h1>
+		<h1>Welcome, {{user[1]}}!</h1>
+		{% if user[3] == "" %}
+		<br>
+		<div class="alert alert-warning">
+			<p>
+				<strong>Info:</strong>
+				Your account isn't linked to your Philips Hue.<br/>
+				Link your account to start controlling your lights.<br/>
+			</p><br/>
+			<a href="{{ url }}" class="btn btn-success">Link to Philips Hue</a>
+		</div>
+		{% endif %}
 	</div>
 </body>
 </html>

@@ -15,17 +15,18 @@ def checkpass(password):
 # Login function
 def login(username, password):
 	users = config.getUsers()
-
+	print(users)
 	saltedpass = password+config.getConfig("salt")
 	encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
 	
-	for user in users:
-		if user[1] == username:
-			if user[2] == encryptedpass:
-				return True
+	for user in range(len(users)):
+		if users[user][1] == username:
+			print(users[user])
+			if users[user][2] == encryptedpass:
+				return [True, user]
 
 	print(f"Username: '{username}' not found")
-	return False
+	return [False]
 
 # Register function
 def register(username, password, email):
@@ -38,20 +39,17 @@ def register(username, password, email):
 	
 	users = config.getUsers()
 
-	id = 0
 	for user in users:
 		if user[1] == username:
 			return 2 # 2 = Username already exist
 		elif user[0] == email:
 			return 3 # 3 = Email already exist
-		id+=1
 	
 	# Hash password
 	saltedpass = password+config.getConfig("salt")
 	encryptedpass = hashlib.sha256(saltedpass.encode()).hexdigest()
 	
 	user = [] # Create user object
-	user.append(id)
 	user.append(email) # Email field
 	user.append(username) # Username field
 	user.append(encryptedpass) # Encrypted password field

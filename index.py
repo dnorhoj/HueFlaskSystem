@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 import auth, json, hue, config
 
 # Set up app
@@ -8,16 +8,22 @@ PORT = 8000
 
 @app.route('/')
 def index():
+	print(f"tis: {session}")
 	return render_template("index.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def loginsite():
+	if not session.get('userID') is None:
+		return redirect(url_for('controlpanel'))
+	
 	if request.method == 'POST':
 		form = request.form.get
 		
-		if auth.login(form('uname'), form('pass')):
-			session['username'] = form('uname')
-			return redirect("/controlpanel")
+		login = auth.login(form('uname'), form('pass'))
+		if login[0]:
+			print(login)
+			session['userID'] = login[1]
+			return redirect(url_for('controlpanel'))
 		
 		return render_template("login.html", error="Wrong password!")
 
@@ -25,6 +31,9 @@ def loginsite():
 
 @app.route('/register', methods=['GET', 'POST'])
 def registersite():
+	if not session.get('userID') is None:
+		return redirect(url_for('controlpanel'))
+
 	if request.method == 'POST':
 		form = request.form.get
 		
@@ -32,7 +41,7 @@ def registersite():
 		login = (form('email'), form('uname'), form('pass'))
 		if code == 0:
 			session['username'] = form('uname')
-			return redirect("/controlpanel")
+			return redirect(url_for('controlpanel'))
 		elif code == 1:
 			return render_template("register.html", criteria=True, login=login)
 		elif code == 2:
@@ -50,11 +59,16 @@ def registersite():
 
 @app.route('/controlpanel')
 def controlpanel():
-	if session.get('username') is None:
-		return redirect("/")
+	if session.get('userID') is None:
+		return redirect(url_for('index'))
 
-	return render_template("controlpanel.html", username=session.get("username"))
-	#return session.get('username', 'Not logged in')
+	return render_template("controlpanel.html", user=config.getUsers()[session.get("userID")], url=hue.Hue().authURL())
+
+@app.route('/logout')
+def logout():
+	del session['userID']
+	#session['userID'] = None
+	return redirect(url_for('index'))
 
 if __name__ == '__main__':
 	app.run(
