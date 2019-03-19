@@ -32,5 +32,13 @@ def addUser(list):
 		with open(USER_FILE, "w") as outfile:
 			json.dump(newdata, outfile, indent=4)
 
-def setUser():
-	pass
+def getUser(id):
+	with open(USER_FILE) as f:
+		return json.load(f)[id]
+
+def setUser(id, user):
+	with open(USER_FILE) as f:
+		newdata = json.load(f)
+		newdata[id] = user
+		with open(USER_FILE, "w") as outfile:
+			json.dump(newdata, outfile, indent=4)

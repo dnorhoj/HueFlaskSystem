@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
-import auth, json, hue, config
+from hue import Hue
+import auth, json, config
 
 # Set up app
 app = Flask(__name__)
@@ -57,18 +58,40 @@ def registersite():
 
 	return render_template("register.html")
 
-@app.route('/controlpanel')
+@app.route('/controlpanel', methods=['GET'])
 def controlpanel():
 	if session.get('userID') is None:
 		return redirect(url_for('index'))
 
-	return render_template("controlpanel.html", user=config.getUsers()[session.get("userID")], url=hue.Hue().authURL())
+	return render_template("controlpanel.html", user=config.getUsers()[session.get("userID")], url=Hue().authURL())
 
-@app.route('/logout')
+@app.route('/logout', methods=["GET"])
 def logout():
 	del session['userID']
 	#session['userID'] = None
 	return redirect(url_for('index'))
+
+@app.route('/callback', methods=["GET"])
+def callback():
+	code = request.args.get('code', None)
+	id = session.get('userID')
+
+	if code is None or id is None:
+		return redirect(url_for('index'))
+	
+	bridge = Hue().codeToBridge(code)
+
+	if bridge == 0: # Unknown error
+		return redirect(url_for('controlpanel'))
+	elif bridge == 1: # Invalid code
+		return redirect(url_for('controlpanel', lol="test"))
+
+	newdata = config.getUser(id)
+	newdata[3] = bridge
+
+	config.setUser(id, newdata)
+	return redirect(url_for('controlpanel', success=0))
+
 
 if __name__ == '__main__':
 	app.run(
