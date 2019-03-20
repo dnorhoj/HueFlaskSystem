@@ -12,16 +12,26 @@
 	{% include "nav.html" %}
 	<div class="container">
 		<h1>Welcome, {{user[1]}}!</h1>
-		{% if user[3] == "" %}
-		<br>
+		{% if user[3] == "" and not error == "1" %}
 		<div class="alert alert-warning">
 			<p>
 				<strong>Info:</strong>
 				Your account isn't linked to your Philips Hue.<br/>
 				Link your account to start controlling your lights.<br/>
-			</p><br/>
-			<a href="{{ url }}" class="btn btn-success">Link to Philips Hue</a>
+			</p>
 		</div>
+		{% endif %}
+		{% if error == "1" %}
+		<div class="alert alert-danger">
+			<p>
+				<strong>Error:</strong>
+				An error occured while linking your account to Philips Hue.<br/>
+				Please try again, and if it keeps failing, create a <a href="https://github.com/dnorhoj/HueFlaskSystem/issues", target="_blank">new issue</a>.<br/>
+			</p>
+		</div>
+		{% endif %}
+		{% if user[3] == "" %}
+		<a href="{{ url }}" class="btn btn-success">Link to Philips Hue</a>
 		{% endif %}
 	</div>
 </body>

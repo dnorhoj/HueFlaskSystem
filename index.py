@@ -38,20 +38,20 @@ def registersite():
 	if request.method == 'POST':
 		form = request.form.get
 		
-		code = auth.register(form('uname'), form('pass'), form('email'))
+		errorcode = auth.register(form('uname'), form('pass'), form('email'))
 		login = (form('email'), form('uname'), form('pass'))
-		if code == 0:
-			session['username'] = form('uname')
+		if errorcode[0] == 0:
+			session['userID'] = errorcode[1]
 			return redirect(url_for('controlpanel'))
-		elif code == 1:
+		elif errorcode[0] == 1:
 			return render_template("register.html", criteria=True, login=login)
-		elif code == 2:
+		elif errorcode[0] == 2:
 			return render_template("register.html", error="Username already exists.", login=login)
-		elif code == 3:
+		elif errorcode[0] == 3:
 			return render_template("register.html", error="Email already exists.", login=login)
-		elif code == 4:
+		elif errorcode[0] == 4:
 			return render_template("register.html", error="Username is too short! It has to be at least 5 characters long", login=login)
-		elif code == 5:
+		elif errorcode[0] == 5:
 			return render_template("register.html", error="Invalid email address!", login=login)
 		else:
 			return "Unknown Error"
@@ -63,7 +63,14 @@ def controlpanel():
 	if session.get('userID') is None:
 		return redirect(url_for('index'))
 
-	return render_template("controlpanel.html", user=config.getUsers()[session.get("userID")], url=Hue().authURL())
+	error = request.args.get('error', "0")
+	print(error)
+	return render_template(
+		"controlpanel.html",
+		user=config.getUser(session.get("userID")),
+		url=Hue().authURL(),
+		error=error
+	)
 
 @app.route('/logout', methods=["GET"])
 def logout():
@@ -82,15 +89,15 @@ def callback():
 	bridge = Hue().codeToBridge(code)
 
 	if bridge == 0: # Unknown error
-		return redirect(url_for('controlpanel'))
+		return redirect(url_for('controlpanel', error=1))
 	elif bridge == 1: # Invalid code
-		return redirect(url_for('controlpanel', lol="test"))
+		return redirect(url_for('controlpanel', error=1))
 
 	newdata = config.getUser(id)
 	newdata[3] = bridge
 
 	config.setUser(id, newdata)
-	return redirect(url_for('controlpanel', success=0))
+	return redirect(url_for('controlpanel'))
 
 
 if __name__ == '__main__':

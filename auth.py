@@ -31,19 +31,21 @@ def login(username, password):
 # Register function
 def register(username, password, email):
 	if not checkpass(password):
-		return 1 # 1 = Password does not meet criterias
+		return [1] # 1 = Password does not meet criterias
 	elif len(username) < 5:
-		return 4 # 4 = Username is too short
+		return [4] # 4 = Username is too short
 	elif re.match(r"[^@]+@[^@]+\.[^@]+", email) is None:
-		return 5 # 5 = Email is invalid
+		return [5] # 5 = Email is invalid
 	
 	users = config.getUsers()
 
+	id = 0
 	for user in users:
 		if user[1] == username:
-			return 2 # 2 = Username already exist
+			return [2] # 2 = Username already exist
 		elif user[0] == email:
-			return 3 # 3 = Email already exist
+			return [3] # 3 = Email already exist
+		id+=1
 	
 	# Hash password
 	saltedpass = password+config.getConfig("salt")
@@ -57,4 +59,4 @@ def register(username, password, email):
 
 	config.addUser(user) # Add user to file
 
-	return 0 # 0 = Success
+	return [0, id] # 0 = Success
