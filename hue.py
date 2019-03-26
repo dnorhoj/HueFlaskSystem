@@ -63,7 +63,24 @@ class Hue():
 		except KeyError:
 			return 0 # Unknown Error
 		return [username, access_token]
+	
+	def getData(self, id):
+		url = f"{self.BRIDGE_API}/{config.getUser(id)[3]}/lights"
+		payload = ""
+		headers = {'authorization': f'Bearer {config.getUser(id)[4]}'}
+
+		r = requests.request("GET", url, data=payload, headers=headers)
+
+		data = r.json()
+
+		try:
+			list(data[0]['error']
+			return "error"
+		except KeyError:
+			pass
+
+		return data
 
 if __name__ == "__main__":
 	h = Hue()
-	print(h.codeToBridge("code"))
+	print(h.getData(0))
