@@ -55,7 +55,8 @@ def register(username, password, email):
 	user.append(email) # Email field
 	user.append(username) # Username field
 	user.append(encryptedpass) # Encrypted password field
-	user.append("") # There's no Hue API Key (yet)
+	user.append("") # There's no Hue bridge username (yet)
+	user.append("") # There's no Hue Access token (yet)
 
 	config.addUser(user) # Add user to file
 

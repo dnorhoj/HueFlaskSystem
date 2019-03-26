@@ -59,9 +59,10 @@ class Hue():
 		except KeyError:
 			return 1 # Invalid token
 		try:
-			return self._getBridgeToken(access_token)
+			username = self._getBridgeToken(access_token)
 		except KeyError:
 			return 0 # Unknown Error
+		return [username, access_token]
 
 if __name__ == "__main__":
 	h = Hue()

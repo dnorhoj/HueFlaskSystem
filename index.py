@@ -9,7 +9,6 @@ PORT = 8000
 
 @app.route('/')
 def index():
-	print(f"tis: {session}")
 	return render_template("index.html")
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -94,7 +93,8 @@ def callback():
 		return redirect(url_for('controlpanel', error=1))
 
 	newdata = config.getUser(id)
-	newdata[3] = bridge
+	newdata[3] = bridge[0]
+	newdata[4] = bridge[1]
 
 	config.setUser(id, newdata)
 	return redirect(url_for('controlpanel'))
