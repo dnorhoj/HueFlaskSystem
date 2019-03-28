@@ -9,12 +9,12 @@ if not os.path.exists(USER_FILE):
 	open(USER_FILE, "w+").write("[]")
 
 # Functions
-def getConfig(key):
+def getConfig(key: str):
 	with open(CONFIG_FILE) as f:
 		data = json.load(f)
 		return data[key]
 
-def setConfig(key, value):
+def setConfig(key: str, value):
 	with open(CONFIG_FILE) as f:
 		newdata = json.load(f)
 		newdata[key] = value
@@ -25,18 +25,18 @@ def getUsers():
 	with open(USER_FILE) as f:
 		return json.load(f)
 
-def addUser(list):
+def addUser(user: list):
 	with open(USER_FILE) as f:
 		newdata = json.load(f)
-		newdata.append(list)
+		newdata.append(user)
 		with open(USER_FILE, "w") as outfile:
 			json.dump(newdata, outfile, indent=4)
 
-def getUser(id):
+def getUser(id: int):
 	with open(USER_FILE) as f:
 		return json.load(f)[id]
 
-def setUser(id, user):
+def setUser(id: int, user: list):
 	with open(USER_FILE) as f:
 		newdata = json.load(f)
 		newdata[id] = user

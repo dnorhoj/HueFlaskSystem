@@ -4,7 +4,7 @@ import json, hashlib, re, config
 DATAFILE = "data.json"
 
 # Check if password is valid
-def checkpass(password):
+def checkpass(password: str):
 	if re.match(r'.{7}', password) is None:
 		return False
 	elif re.search(r'[A-Z][a-z]|[a-z][A-Z]', password) is None:
@@ -13,7 +13,7 @@ def checkpass(password):
 	return True
 
 # Login function
-def login(username, password):
+def login(username: str, password: str):
 	users = config.getUsers()
 	print(users)
 	saltedpass = password+config.getConfig("salt")
@@ -29,7 +29,7 @@ def login(username, password):
 	return [False]
 
 # Register function
-def register(username, password, email):
+def register(username: str, password: str, email: str):
 	if not checkpass(password):
 		return [1] # 1 = Password does not meet criterias
 	elif len(username) < 5:

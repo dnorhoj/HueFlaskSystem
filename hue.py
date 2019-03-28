@@ -6,7 +6,7 @@ class Hue():
 		self.BRIDGE_API = f"{self.BASE_API}/bridge"
 		self.OAUTH_API = f"{self.BASE_API}/oauth2"
 
-	def _convertCode(self, code):
+	def _convertCode(self, code: str):
 		hue = config.getConfig("hue")
 
 		url = f"{self.OAUTH_API}/token"
@@ -26,7 +26,7 @@ class Hue():
 
 		return response.json()
 
-	def _getBridgeToken(self, token): # Gives Hue bridge token from acces token (get from getToken())
+	def _getBridgeToken(self, token: str): # Gives Hue bridge token from acces token (get from getToken())
 		hue = config.getConfig("hue")
 
 		headers = {
@@ -53,7 +53,7 @@ class Hue():
 		hue = config.getConfig("hue")
 		return f"{self.OAUTH_API}/auth?clientid={hue['clientid']}&appid={hue['appid']}&deviceid={hue['appid']}&state={hue['state']}&response_type=code"
 
-	def codeToBridge(self, code):
+	def codeToBridge(self, code: str):
 		try:
 			access_token = self._convertCode(code)['access_token']
 		except KeyError:
@@ -64,7 +64,7 @@ class Hue():
 			return 0 # Unknown Error
 		return [username, access_token]
 	
-	def getData(self, id):
+	def getData(self, id: int):
 		url = f"{self.BRIDGE_API}/{config.getUser(id)[3]}/lights"
 		payload = ""
 		headers = {'authorization': f'Bearer {config.getUser(id)[4]}'}
