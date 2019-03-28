@@ -83,4 +83,9 @@ class Hue():
 
 if __name__ == "__main__":
 	h = Hue()
-	print(h.getData(0))
+	data = h.getData(0)
+	for light in data:
+		light = data[light]
+		print(light['name'])
+		print(light['state']['on'])
+		print("---------\n")
