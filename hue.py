@@ -74,7 +74,7 @@ class Hue():
 		data = r.json()
 
 		try:
-			list(data[0]['error']
+			data[0]['error']
 			return "error"
 		except KeyError:
 			pass
