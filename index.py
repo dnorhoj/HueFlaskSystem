@@ -63,11 +63,12 @@ def controlpanel():
 		return redirect(url_for('index'))
 
 	error = request.args.get('error', "0")
-	print(error)
+	h = Hue()
+	print(h.getData(session.get("userID")))
 	return render_template(
 		"controlpanel.html",
-		user=config.getUser(session.get("userID")),
-		url=Hue().authURL(),
+		data=h.getData(session.get("userID")),
+		url=h.authURL(),
 		error=error
 	)
 

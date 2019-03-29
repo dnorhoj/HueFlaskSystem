@@ -66,10 +66,17 @@ class Hue():
 	
 	def getData(self, id: int):
 		url = f"{self.BRIDGE_API}/{config.getUser(id)[3]}/lights"
-		payload = ""
-		headers = {'authorization': f'Bearer {config.getUser(id)[4]}'}
+		accesstoken = config.getUser(id)[4]
 
-		r = requests.request("GET", url, data=payload, headers=headers)
+		if accesstoken == "":
+			return False
+
+		headers = {'authorization': f'Bearer {accesstoken}'}
+
+		try:
+			r = requests.request("GET", url, headers=headers)
+		except ConnectionError:
+			return False
 
 		data = r.json()
 

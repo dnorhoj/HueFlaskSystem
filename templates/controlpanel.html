@@ -7,8 +7,8 @@
 <body>
 	{% include "nav.html" %}
 	<div class="container">
-		<h1>Welcome, {{user[1]}}!</h1>
-		{% if user[3] == "" and not error == "1" %}
+		<h1>Control Panel</h1>
+		{% if data == false and not error == "1" %}
 		<div class="alert alert-warning">
 			<p>
 				<strong>Info:</strong>
@@ -16,8 +16,7 @@
 				Link your account to start controlling your lights.<br/>
 			</p>
 		</div>
-		{% endif %}
-		{% if error == "1" %}
+		{% elif error == "1" %}
 		<div class="alert alert-danger">
 			<p>
 				<strong>Error:</strong>
@@ -26,8 +25,37 @@
 			</p>
 		</div>
 		{% endif %}
-		{% if user[3] == "" %}
+		{% if data == false %}
 		<a href="{{ url }}" class="btn btn-success">Link to Philips Hue</a>
+		{% endif %}
+		{% if data is mapping %}
+		<table class="table table-sm table-hover">
+			<thead>
+				<tr>
+					<th scope="col" style="width:1%;">#</th>
+					<th scope="col">Hue Light</th>
+					<th scope="col">State</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for key, val in data.items() %}
+				<tr>
+					<td scope="row"><strong>{{ key }}</strong></td>
+					<td>{{val['name']}}</td>
+					<td>
+						{% if val['state']['reachable'] == false %}
+						Unreachable: 
+						{% endif %}
+						{% if val['state']['on'] == true %}
+						On
+						{% else %}
+						Off
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 		{% endif %}
 	</div>
 </body>
