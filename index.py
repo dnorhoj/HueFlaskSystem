@@ -21,6 +21,7 @@ def loginsite():
 		
 		login = auth.login(form('uname'), form('pass'))
 		if login[0]:
+			print(login)
 			session['userID'] = login[1]
 			return redirect(url_for('controlpanel'))
 		
@@ -63,6 +64,7 @@ def controlpanel():
 
 	error = request.args.get('error', "0")
 	h = Hue()
+	print(h.getData(session.get("userID")))
 	return render_template(
 		"controlpanel.html",
 		data=h.getData(session.get("userID")),
